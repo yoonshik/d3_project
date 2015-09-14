@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>D3: Creating paragraphs dynamically from data</title>
+        <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+        <style type="text/css">
+            div.bar {
+                display: inline-block;
+                width: 20px;
+                height: 75px;   /* Gets overriden by D3-assigned height below */
+                margin-right: 2px;
+                background-color: teal;
+            }
+        </style>
+    </head>
+    <body>
+        <script type="text/javascript">
+        
+            var dataset = [ 5, 10, 15, 20, 25 ];
+            <!-- bar graph  -->
+            d3.select("body").selectAll("div")
+                .data(dataset)
+                .enter()
+                .append("div")
+                .attr("class", "bar")
+                .style("height", function(d){
+                    return d + "px";
+                });
+             
+            <!-- red/black text  -->
+            d3.select("body").selectAll("p")
+                .data(dataset)
+                .enter()
+                .append("p")
+                .text(function (d){
+                    return "I can count up to " + d;
+                })
+                .style("color", function (d){
+                    if (d>15) {
+                        return "red";
+                    } else {
+                        return "black";
+                    }
+                })
+                
+                <!-- printing out spreadsheet in console -->
+                d3.csv("food.csv", function(data) {
+                    dataset = data;
+                    console.log(data);
+                    generateVis();
+                });
+                
+                function generateVis(){
+                    console.log(dataset);
+                }
+        </script>
+        <div class="bar"></div>
+    </body>
+</html>
