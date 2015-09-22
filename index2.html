@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>D3: Drawing divs, spaced out</title>
+        <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+        <style type="text/css">
+            div.bar {
+                display: inline-block;
+                width: 20px;
+                height: 75px;   /* Gets overriden by D3-assigned height below */
+                margin-right: 2px;
+                background-color: teal;
+            }
+        
+        </style>
+    </head>
+    <body>
+        <script type="text/javascript">
+        
+            var dataset = [];
+            for (var i = 0; i < 25; i++) {
+                var newNumber = Math.round(Math.random() * 30);
+                dataset.push(newNumber);
+            } 
+            d3.select("body").selectAll("div")
+                .data(dataset)
+                .enter()
+                .append("div")
+                .attr("class", "bar")
+                .style("height", function(d) {
+                    var barHeight = d * 5;
+                    return barHeight + "px";
+                });
+            
+        </script>
+        <script type="text/javascript">
+            
+            //Width and height
+            var w = 500;
+            var h = 50;
+            
+            //Data
+            var dataset = [ 5, 10, 15, 20, 25 ];
+            
+            //Create SVG element
+            var svg = d3.select("body")
+                        .append("svg")
+                        .attr("width", w)
+                        .attr("height", h);
+
+            var circles = svg.selectAll("circle")
+                .data(dataset)
+                .enter()
+                .append("circle");
+
+            circles.attr("cx", function(d, i) {
+                        return (i * 50) + 25;
+                    })
+                   .attr("cy", h/2)
+                   .attr("r", function(d) {
+                        return d;
+                   })
+                   .attr("fill", "yellow")
+                   .attr("stroke", "orange")
+                   .attr("stroke-width", function(d) {
+                        return d/2;
+                   });
+
+        </script>
+    </body>
+</html>
+
