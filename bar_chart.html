@@ -3,11 +3,11 @@
 <style>
 
 .bar {
-  fill: steelblue;
+  fill: #094D74;
 }
 
 .bar:hover {
-  fill: brown;
+  fill: #759CD8;
 }
 
 .axis {
@@ -30,7 +30,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
 <script>
 
-var margin = {top: 20, right: 20, bottom: 30, left: 40},
+var margin = {top: 20, right: 20, bottom: 30, left: 100},
     width = 480 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
@@ -47,7 +47,7 @@ var xAxis = d3.svg.axis()
 var yAxis = d3.svg.axis()
     .scale(y)
     .orient("left")
-    .ticks(10);
+    .ticks(10, "$");
 
 var svg = d3.select("body").append("svg")
     .attr("width", width + margin.left + margin.right)
@@ -59,7 +59,7 @@ d3.csv("data.csv", type, function(error, data) {
   if (error) throw error;
 
   x.domain(data.map(function(d) { return d.drugname; }));
-  y.domain([0, d3.max(data, function(d) { return d.frequency; })]);
+  y.domain([0, d3.max(data, function(d) { return d.total_sum; })]);
 
   svg.append("g")
       .attr("class", "x axis")
@@ -71,10 +71,10 @@ d3.csv("data.csv", type, function(error, data) {
       .call(yAxis)
     .append("text")
       .attr("transform", "rotate(-90)")
-      .attr("y", 6)
+      .attr("y", 0)
       .attr("dy", ".71em")
       .style("text-anchor", "end")
-      .text("Frequency");
+  var colors = ["#CFDAEC", "#CFDAEC", "#9CB9D1", "#759CD8", "#094D74"];
 
   svg.selectAll(".bar")
       .data(data)
@@ -82,12 +82,15 @@ d3.csv("data.csv", type, function(error, data) {
       .attr("class", "bar")
       .attr("x", function(d) { return x(d.drugname); })
       .attr("width", x.rangeBand())
-      .attr("y", function(d) { return y(d.frequency); })
-      .attr("height", function(d) { return height - y(d.frequency); });
+      .attr("y", function(d) { return y(d.total_sum); })
+      .attr("height", function(d) { return height - y(d.total_sum); })
+      .style("fill", function(d) { 
+        return colors.pop();
+        });
 });
 
 function type(d) {
-  d.frequency = +d.frequency;
+  d.total_sum = +d.total_sum;
   return d;
 }
 
