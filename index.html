@@ -18,6 +18,50 @@
         span.s2 {color: #2262cc; background-color: #d3dae4}
         span.s3 {color: #000000}
     </style>
+    <style>
+
+    body {
+      font: 10px sans-serif;
+    }
+
+    .axis path,
+    .axis line {
+      fill: none;
+      stroke: #000;
+      shape-rendering: crispEdges;
+    }
+
+    .x.axis path {
+      display: none;
+    }
+
+    </style>
+    <style>
+
+    .bar {
+      fill: #094D74;
+    }
+
+    .bar:hover {
+      fill: #759CD8;
+    }
+
+    .axis {
+      font: 10px sans-serif;
+    }
+
+    .axis path,
+    .axis line {
+      fill: none;
+      stroke: #000;
+      shape-rendering: crispEdges;
+    }
+
+    .x.axis path {
+      display: none;
+    }
+
+    </style>
 </head>
 <body>
     <h1 style="margin: 0.0px 0.0px 20.0px 0.0px; line-height: 40.0px; font: 34.0px Georgia; background-color: #ffffff">Vying for Market Share, Companies Heavily Promote ‘Me Too’ Drugs</h1>
@@ -28,7 +72,107 @@
     <p class="p5">For more than five decades, the blood thinner Coumadin was the only option for millions of patients at risk for life-threatening blood clots. But now, a furious battle is underway among the makers of three newer competitors for the prescription pads of doctors across the country.</p>
     <p class="p5">The manufacturers of these drugs — <a href="http://projects.propublica.org/open-payments/?search=drug&amp;main=8378&amp;compare="><span class="s2">Pradaxa</span></a>, <a href="http://projects.propublica.org/open-payments/?search=drug&amp;main=9819&amp;compare="><span class="s2">Xarelto</span></a> and <a href="http://projects.propublica.org/open-payments/?search=drug&amp;main=6422&amp;compare="><span class="s2">Eliquis</span></a> — have been wooing physicians in part by paying for meals, promotional speeches, consulting gigs and educational gifts. In the last five months of 2013, the companies spent nearly $19.4 million on doctors and teaching hospitals, according to ProPublica's analysis of federal data released last fall.</p>
 
-<link rel="import" href="payment_types.html" >
+<div id="payment_types"></div>
+<script>
+
+var margin = {top: 20, right: 20, bottom: 30, left: 40},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+var x0 = d3.scale.ordinal()
+    .rangeRoundBands([0, width], .1);
+
+var x1 = d3.scale.ordinal();
+
+var y = d3.scale.linear()
+    .range([height, 0]);
+
+var color = d3.scale.ordinal()
+    .range(["#b4714c", "#b8a044", "#726b4f", "#211f0c"]);
+
+var xAxis = d3.svg.axis()
+    .scale(x0)
+    .orient("bottom");
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left")
+    .tickFormat(d3.format("$,.2s"));
+
+var svg = d3.select("#payment_types").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+d3.csv("data2.csv", function(error, data) {
+  if (error) throw error;
+
+  var paymentTypes = d3.keys(data[0])
+        .filter(function(key) { 
+            return key !== "Company"; 
+        });
+
+  data.forEach(function(d) {
+    d.payments = paymentTypes.map(function(name) { return {name: name, value: +d[name]}; });
+  });
+
+  x0.domain(data.map(function(d) { return d.Company; }));
+  x1.domain(paymentTypes).rangeRoundBands([0, x0.rangeBand()]);
+  y.domain([0, d3.max(data, function(d) { return d3.max(d.payments, function(d) { return d.value; }); })]);
+
+  svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis);
+
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+    .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("Payment");
+
+  var state = svg.selectAll(".state")
+      .data(data)
+    .enter().append("g")
+      .attr("class", "g")
+      .attr("transform", function(d) { return "translate(" + x0(d.Company) + ",0)"; });
+
+  state.selectAll("rect")
+      .data(function(d) { return d.payments; })
+    .enter().append("rect")
+      .attr("width", x1.rangeBand())
+      .attr("x", function(d) { return x1(d.name); })
+      .attr("y", function(d) { return y(d.value); })
+      .attr("height", function(d) { return height - y(d.value); })
+      .style("fill", function(d) { return color(d.name); });
+
+  var legend = svg.selectAll(".legend")
+      .data(paymentTypes.slice().reverse())
+    .enter().append("g")
+      .attr("class", "legend")
+      .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+
+  legend.append("rect")
+      .attr("x", width - 18)
+      .attr("width", 18)
+      .attr("height", 18)
+      .style("fill", color);
+
+  legend.append("text")
+      .attr("x", width - 24)
+      .attr("y", 9)
+      .attr("dy", ".35em")
+      .style("text-anchor", "end")
+      .text(function(d) { return d; });
+
+});
+
+  </script>
 
     <p class="p5">The information, from a database known as Open Payments, gives the first comprehensive look at how much money drug and device companies have spent working with doctors. What it shows is that the drugs most aggressively promoted to doctors typically aren't cures or even big medical breakthroughs. Some are top sellers, but most are not.</p>
     <p class="p5">Instead, they are newer drugs that manufacturers hope will gain a foothold, sometimes after failing to meet Wall Street's early expectations.</p>
@@ -41,6 +185,9 @@
     <p class="p5">Victoza, through a once-a-day injection, helps lower blood sugar among diabetics, but researchers and advocacy groups have said drugs of its class carry an increased risk of thyroid cancer and pancreatitis. Dr. Todd Hobbs, chief medical officer of Novo Nordisk in North America, said the company's spending reflected Victoza's newness and the need to address such safety concerns.</p>
     <p class="p5">"We just received a huge amount of interest and questions and need for education," Hobbs said, referring to inquiries by health care professionals, particularly primary care doctors. "You see the fruits of that in this report."</p>
     <div style="margin-left:120px; margin-top:50px; font-size:16px;">Drugs that Spend Most Money on Physicians</div>
+    <div id="most_money"></div>
+
+    
     <script>
     var margin = {top: 20, right: 20, bottom: 30, left: 100},
         width = 480 - margin.left - margin.right,
@@ -62,7 +209,7 @@
         .ticks(10, "$")
         .tickFormat(d3.format("$,.2s"));
 
-    var svg = d3.select("body").append("svg")
+    var svg = d3.select("#most_money").append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
       .append("g")
