@@ -6,7 +6,6 @@
     <title>Vying for Market Share, Companies Heavily Promote ‘Me Too’ Drugs</title>
     <meta name="Generator" content="Cocoa HTML Writer">
     <meta name="CocoaVersion" content="1265.21">
-    <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
     <style type="text/css">
         p.p2 {margin: 0.0px 0.0px 20.0px 0.0px; line-height: 19.0px; font: 16.0px Georgia; background-color: #ffffff}
         p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; line-height: 16.0px; font: 14.0px Georgia; color: #666666; background-color: #ffffff}
@@ -70,110 +69,10 @@
     ProPublica, Jan. 7, 2015, 2 p.m.</i></p>
     <p class="p4"><br></p>
     <p class="p5">For more than five decades, the blood thinner Coumadin was the only option for millions of patients at risk for life-threatening blood clots. But now, a furious battle is underway among the makers of three newer competitors for the prescription pads of doctors across the country.</p>
+
+    <iframe src="payment_types.html" style="width:1000px; height:520px"></iframe>
+
     <p class="p5">The manufacturers of these drugs — <a href="http://projects.propublica.org/open-payments/?search=drug&amp;main=8378&amp;compare="><span class="s2">Pradaxa</span></a>, <a href="http://projects.propublica.org/open-payments/?search=drug&amp;main=9819&amp;compare="><span class="s2">Xarelto</span></a> and <a href="http://projects.propublica.org/open-payments/?search=drug&amp;main=6422&amp;compare="><span class="s2">Eliquis</span></a> — have been wooing physicians in part by paying for meals, promotional speeches, consulting gigs and educational gifts. In the last five months of 2013, the companies spent nearly $19.4 million on doctors and teaching hospitals, according to ProPublica's analysis of federal data released last fall.</p>
-
-    <div id="payment_types"></div>
-    <script>
-
-    var margin = {top: 20, right: 20, bottom: 30, left: 40},
-        width = 960 - margin.left - margin.right,
-        height = 500 - margin.top - margin.bottom;
-
-    var x0 = d3.scale.ordinal()
-        .rangeRoundBands([0, width], .1);
-
-    var x1 = d3.scale.ordinal();
-
-    var y = d3.scale.linear()
-        .range([height, 0]);
-
-    var color = d3.scale.ordinal()
-        .range(["#b4714c", "#b8a044", "#726b4f", "#211f0c"]);
-
-    var xAxis = d3.svg.axis()
-        .scale(x0)
-        .orient("bottom");
-
-    var yAxis = d3.svg.axis()
-        .scale(y)
-        .orient("left")
-        .tickFormat(d3.format("$,.2s"));
-
-    var svg = d3.select("#payment_types").append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-      .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-    d3.csv("data2.csv", function(error, data) {
-      if (error) throw error;
-
-      var paymentTypes = d3.keys(data[0])
-            .filter(function(key) { 
-                return key !== "Company"; 
-            });
-
-      data.forEach(function(d) {
-        d.payments = paymentTypes.map(function(name) { return {name: name, value: +d[name]}; });
-      });
-
-      x0.domain(data.map(function(d) { return d.Company; }));
-      x1.domain(paymentTypes).rangeRoundBands([0, x0.rangeBand()]);
-      y.domain([0, d3.max(data, function(d) { return d3.max(d.payments, function(d) { return d.value; }); })]);
-
-      svg.append("g")
-          .attr("class", "x axis")
-          .attr("transform", "translate(0," + height + ")")
-          .call(xAxis);
-
-      svg.append("g")
-          .attr("class", "y axis")
-          .call(yAxis)
-        .append("text")
-          .attr("transform", "rotate(-90)")
-          .attr("y", 6)
-          .attr("dy", ".71em")
-          .style("text-anchor", "end")
-          .text("Payment");
-
-      var state = svg.selectAll(".state")
-          .data(data)
-        .enter().append("g")
-          .attr("class", "g")
-          .attr("transform", function(d) { return "translate(" + x0(d.Company) + ",0)"; });
-
-      state.selectAll("rect")
-          .data(function(d) { return d.payments; })
-        .enter().append("rect")
-          .attr("width", x1.rangeBand())
-          .attr("x", function(d) { return x1(d.name); })
-          .attr("y", function(d) { return y(d.value); })
-          .attr("height", function(d) { return height - y(d.value); })
-          .style("fill", function(d) { return color(d.name); });
-
-      var legend = svg.selectAll(".legend")
-          .data(paymentTypes.slice().reverse())
-        .enter().append("g")
-          .attr("class", "legend")
-          .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
-
-      legend.append("rect")
-          .attr("x", width - 18)
-          .attr("width", 18)
-          .attr("height", 18)
-          .style("fill", color);
-
-      legend.append("text")
-          .attr("x", width - 24)
-          .attr("y", 9)
-          .attr("dy", ".35em")
-          .style("text-anchor", "end")
-          .text(function(d) { return d; });
-
-    });
-
-    </script>
-
     <p class="p5">The information, from a database known as Open Payments, gives the first comprehensive look at how much money drug and device companies have spent working with doctors. What it shows is that the drugs most aggressively promoted to doctors typically aren't cures or even big medical breakthroughs. Some are top sellers, but most are not.</p>
     <p class="p5">Instead, they are newer drugs that manufacturers hope will gain a foothold, sometimes after failing to meet Wall Street's early expectations.</p>
     <p class="p5">"They may have some unique niche in the market, but they are fairly redundant with other therapies that are already available," said Dr. Joseph Ross, an associate professor of medicine and public health at Yale University School of Medicine. "Many of these, you could call me-too drugs."</p>
@@ -185,76 +84,9 @@
     <p class="p5">Victoza, through a once-a-day injection, helps lower blood sugar among diabetics, but researchers and advocacy groups have said drugs of its class carry an increased risk of thyroid cancer and pancreatitis. Dr. Todd Hobbs, chief medical officer of Novo Nordisk in North America, said the company's spending reflected Victoza's newness and the need to address such safety concerns.</p>
     <p class="p5">"We just received a huge amount of interest and questions and need for education," Hobbs said, referring to inquiries by health care professionals, particularly primary care doctors. "You see the fruits of that in this report."</p>
     <div style="margin-left:120px; margin-top:50px; font-size:16px;">Drugs that Spend Most Money on Physicians</div>
-    <div id="most_money"></div>
 
 
-    <script>
-    var margin = {top: 20, right: 20, bottom: 30, left: 100},
-        width = 480 - margin.left - margin.right,
-        height = 500 - margin.top - margin.bottom;
-
-    var x = d3.scale.ordinal()
-        .rangeRoundBands([0, width], .1);
-
-    var y = d3.scale.linear()
-        .range([height, 0]);
-
-    var xAxis = d3.svg.axis()
-        .scale(x)
-        .orient("bottom");
-
-    var yAxis = d3.svg.axis()
-        .scale(y)
-        .orient("left")
-        .ticks(10, "$")
-        .tickFormat(d3.format("$,.2s"));
-
-    var svg = d3.select("#most_money").append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-      .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-    d3.csv("data.csv", type, function(error, data) {
-      if (error) throw error;
-
-      x.domain(data.map(function(d) { return d.drugname; }));
-      y.domain([0, d3.max(data, function(d) { return d.total_sum; })]);
-
-      svg.append("g")
-          .attr("class", "x axis")
-          .attr("transform", "translate(0," + height + ")")
-          .call(xAxis);
-
-      svg.append("g")
-          .attr("class", "y axis")
-          .call(yAxis)
-        .append("text")
-          .attr("transform", "rotate(-90)")
-          .attr("y", 0)
-          .attr("dy", ".71em")
-          .style("text-anchor", "end")
-      var colors = ["#CFDAEC", "#CFDAEC", "#9CB9D1", "#759CD8", "#094D74"];
-
-      svg.selectAll(".bar")
-          .data(data)
-        .enter().append("rect")
-          .attr("class", "bar")
-          .attr("x", function(d) { return x(d.drugname); })                                                                                   
-          .attr("width", x.rangeBand())
-          .attr("y", function(d) { return y(d.total_sum); })
-          .attr("height", function(d) { return height - y(d.total_sum); })
-          .style("fill", function(d) { 
-            return colors.pop();
-            });
-    });
-
-    function type(d) {
-      d.total_sum = +d.total_sum;
-      return d;
-    }
-
-    </script>  
+    <iframe src="total_sum.html" style="width:600px; height:520px"></iframe>
   
     <p class="p5">Eliquis, the anticoagulant jointly marketed by Bristol-Myers Squibb and Pfizer, ranked second in its link to spending on physicians, with nearly $8 million, our analysis showed. In a statement, the companies said their spending helps ensure physicians understand the appropriate use of Eliquis. Because the drug is prescribed by physicians in different specialties, the statement said, "it is critical to have a speaker program that adequately provides robust education to these physicians."</p>
     <p class="p5">The drug associated with the third-most payments to doctors was <a href="http://projects.propublica.org/open-payments/?search=drug&amp;main=5690&amp;compare="><span class="s2">Brilinta</span></a>, a different type of blood thinner made by AstraZeneca that vies for sales with Plavix, which is now available generically. In an email, AstraZeneca said it had identified Brilinta as one of its "key platforms for growth" and increased speaker and research spending on it. "Physicians are also indispensable partners in our efforts to bring new medicines to patients," the company said.</p>
