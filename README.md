@@ -1,1 +1,1 @@
-sudo ./runserver.py
+Assignment 1 for JOUR479D
